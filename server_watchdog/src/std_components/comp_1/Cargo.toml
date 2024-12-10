@@ -1,0 +1,10 @@
+[package]
+name = "comp_1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+plugin_api = { path = "../../../plugin_api" } # Path to the shared crate
+
+[lib]
+crate-type = ["cdylib"] # Compilare come libreria dinamica
