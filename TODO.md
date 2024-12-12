@@ -1,3 +1,8 @@
+# Todo:
+    - remove dynamic compilation of modules for now, try to implement it in the future
+    - implement simple functionalities
+    - deploy to testing env
+
 # Setup testing enviroment
 - Debian system, such as a VM;
 - Try container with docker.
