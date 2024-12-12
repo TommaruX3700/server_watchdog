@@ -1,0 +1,10 @@
+[package]
+name = "comp_2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[lib]
+name = "comp_2"
+crate-type = ["cdylib"] # Compilare come libreria dinamica
