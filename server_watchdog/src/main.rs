@@ -1,6 +1,7 @@
-use sysinfo::System;
-
 mod log;
+
+use sysinfo::System;
+use log::{Log, LogLevel};
 
 fn get_system_info() -> String {
     let mut sys = System::new_all();
@@ -44,18 +45,26 @@ fn get_temperatures() -> String {
 #[tokio::main]
 async fn main() {
     println!("Starting application!");
+
+    let mut log_file = Log::init();
+    log_file.write_to_log(LogLevel::Debug, "Application started!");
+        
     ctrlc::set_handler(move || {
         println!("Shutting down...");
         std::process::exit(0);
     })
     .expect("Error setting Ctrl-C handler");
+
     loop {
         let system_info = get_system_info();
         println!("{}", system_info);
         let temperatures = get_temperatures();
         println!("{}", temperatures);
+
         // TODO: implement MQTT message sending
         // send_mqtt_message("system/info", &system_info).await;
+
+        log_file.write_to_log(LogLevel::Debug, "log file test");
         tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
     }
 }
