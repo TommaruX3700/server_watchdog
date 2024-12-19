@@ -1,11 +1,18 @@
 use sysinfo::System;
 
+mod log;
+
 fn get_system_info() -> String {
     let mut sys = System::new_all();
     sys.refresh_all();
     let cpu_usage = sys.global_cpu_usage();
     let memory_used = sys.used_memory();
     let memory_total = sys.total_memory();
+    
+    if memory_used > memory_total * 90 / 100 {
+        clear_cache();
+    }
+
     format!(
         "CPU Usage: {:.2}% | Memory Used: {} MB / {} MB",
         cpu_usage,
@@ -13,7 +20,6 @@ fn get_system_info() -> String {
         memory_total / 1024
     )
 }
-
 
 use std::process::Command;
 fn clear_cache() {
@@ -48,8 +54,9 @@ async fn main() {
         println!("{}", system_info);
         let temperatures = get_temperatures();
         println!("{}", temperatures);
+        // TODO: implement MQTT message sending
         // send_mqtt_message("system/info", &system_info).await;
-        tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
+        tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
     }
 }
 

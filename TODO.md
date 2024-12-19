@@ -1,5 +1,5 @@
 # Todo:
-    - implement simple functionalities
+    - 
     - deploy to testing env
 
 # Setup testing enviroment
