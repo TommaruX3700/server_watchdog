@@ -1,5 +1,4 @@
 # Todo:
-    - remove dynamic compilation of modules for now, try to implement it in the future
     - implement simple functionalities
     - deploy to testing env
 
@@ -41,7 +40,8 @@
         - `-del`: rimuovi componente al relativo ID (da sviluppare, non eliminare componenti di default)
         - `` rendere modificabile il comportamento del programma delle funzionalità attive (es: unità di misura, etc)
 
-- "Componenti" 
+# Future features:  
+- "Componenti" (Feature da implementare successivamente)
 Il programma voglio strutturarlo in "componenti", in modo che questi siano programmabili dall'utente, facilmente modificabili sia a livello di shell che di script e sviluppabili.
 Inoltre voglio far sì che siano categorizzabili asseconda dei loro ID e Tags.
 Le "Properties" dovranno essere strutture dati ben definite che il programma riesca a leggere e modificare direttamente da shell.
