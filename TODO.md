@@ -1,6 +1,9 @@
 # Todo:
-    - 
-    - deploy to testing env
+    - implement mqtt messages
+    - implement better logging 
+    - implement better readings
+    - implement better operation or resources
+    - implment automatic handle of new versions (dont know)
 
 # Setup testing enviroment
 - Debian system, such as a VM;
