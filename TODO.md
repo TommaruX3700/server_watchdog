@@ -4,10 +4,10 @@
     - implement better readings
     - implement better operation or resources
     - implment automatic handle of new versions (dont know)
+    - develop auto installation script for linux debian (checks version file and dowloads from the repo, also that installs necessary dependencies)
 
 # Setup testing enviroment
 - Debian system, such as a VM;
-- Try container with docker.
 
 # Installation tool 
 - Start with debian only;

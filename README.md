@@ -1,5 +1,12 @@
 # Server_watchdog
 
+## v0.2 - Pre-Alpha - 07/01/2025
+### Updates
+- Added Dockerfile to assembly testing container enviroment
+- Developing MQTT Client messaging 
+- Developing auto-installer
+- 
+
 ## v0.1 - pre-alpha - 10/12/2024
 ### State:
 Under development.
