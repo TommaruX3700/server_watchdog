@@ -1,7 +1,8 @@
 # Todo:
+    - implement devices ping (message if a system cant ping)
     - implement mqtt messages
-    - implement better logging 
-    - implement better readings
+    - implement better logging (provide async logs)
+    - implement better readings 
     - implement better operation or resources
     - implment automatic handle of new versions (dont know)
     - develop auto installation script for linux debian (checks version file and dowloads from the repo, also that installs necessary dependencies)

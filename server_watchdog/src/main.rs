@@ -61,11 +61,13 @@ async fn main() {
         let temperatures = get_temperatures();
         println!("{}", temperatures);
 
+        // TODO: implementare ping a lista di servizi di rete specificati
+
         // TODO: implement MQTT message sending
         // send_mqtt_message("system/info", &system_info).await;
 
         log_file.write_to_log(LogLevel::Debug, "log file test");
-        tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+        tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
     }
 }
 
