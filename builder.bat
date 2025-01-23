@@ -86,16 +86,10 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-docker run server_watchdog >nul 2>nul
+:: try to build the image and run it in a new container
+docker build -t server_watchdog . && docker run server_watchdog >nul 2>nul
 if %errorlevel% neq 0 (
-    echo Docker is installed, but not running!
-    echo Trying to start Docker. . .
-
-    :: try to build the image and run it in a new container
-    docker build -t server_watchdog . && docker run server_watchdog >nul 2>nul
-    if %errorlevel% neq 0 (
-        echo Cant build or start a new Docker container! Shutting down . . .
-        exit /b 1
-    )
+    echo Cant build or start a new Docker container! Shutting down . . .
+    exit /b 1
 )
 
