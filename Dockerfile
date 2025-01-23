@@ -6,10 +6,11 @@ WORKDIR /usr/src/myapp
 COPY . .
 
 ## get the repo from the copied "release_repo" file
-RUN REPO=$(grep repo ./release_repo | cut -d '=' -f2) && \
+RUN REPO=$(grep repo release_repo | cut -d '=' -f2) && \
     echo "REPO=$REPO" && \
-    export REPO && \
     apt-get update && apt-get upgrade -y && apt-get install -y git
+
+ENV REPO=$REPO
 
 # compile the code for debian usage, 
 RUN cargo install --path ./server_watchdog/
