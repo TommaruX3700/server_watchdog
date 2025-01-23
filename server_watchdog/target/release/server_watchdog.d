@@ -1,0 +1,1 @@
+C:\Users\TomX37\Documents\REPOS\server_watchdog\server_watchdog\target\release\server_watchdog.exe: C:\Users\TomX37\Documents\REPOS\server_watchdog\server_watchdog\src\log.rs C:\Users\TomX37\Documents\REPOS\server_watchdog\server_watchdog\src\main.rs
