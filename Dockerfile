@@ -17,7 +17,9 @@ RUN cargo install --path ./server_watchdog/
 RUN cargo install --path ./installer/
 RUN cargo install --path ./unistaller/
 
-RUN git add . && \
+RUN git config --global user.name "TommaruX3700" && \
+    git config --global user.email "tmx37.dev@gmail.com" && \
+    git add . && \
     git commit -m "Committing local changes before branch switch" || \
     git stash && \
     git checkout deb_release || git checkout -b deb_release origin/deb_release
