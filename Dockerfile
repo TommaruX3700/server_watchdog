@@ -17,7 +17,7 @@ RUN cargo install --path ./server_watchdog/
 RUN cargo install --path ./installer/
 RUN cargo install --path ./unistaller/
 
-RUN git remote add origin $REPO && \
+RUN git remote add origin https://github.com/TommaruX3700/server_watchdog.git && \
     git fetch origin && \
     git checkout -b deb_release origin/deb_release
 
