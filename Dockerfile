@@ -2,23 +2,27 @@
 
 FROM rust as builder
 WORKDIR /usr/src/myapp
-COPY . .
-## get the repo from the copied "release_repo" file
-RUN REPO=$(grep repo ./release_repo | cut -d '=' -f2)
-# ENV REPO=${REPO}
 
-RUN apt-get update && apt-get upgrade -y && apt-get install git
+COPY . .
+
+## get the repo from the copied "release_repo" file
+RUN REPO=$(grep repo ./release_repo | cut -d '=' -f2) && \
+    echo "REPO=$REPO" && \
+    export REPO && \
+    apt-get update && apt-get upgrade -y && apt-get install -y git
+
 # compile the code for debian usage, 
 RUN cargo install --path ./server_watchdog/
 RUN cargo install --path ./installer/
 RUN cargo install --path ./unistaller/
 
-RUN git remote add origin ${REPO} 
-RUN fetch origin 
-RUN checkout -b deb_release origin/deb_release 
-RUN git add . 
-RUN git commit -m "New debian release" 
-RUN git push --set-upstream origin deb_release
+RUN git remote add origin $REPO && \
+    git fetch origin && \
+    git checkout -b deb_release origin/deb_release
+
+RUN git add . && \
+    git commit -m "New debian release" && \
+    git push --set-upstream origin deb_release
 
 #clone the debian-release branch and push binaries to it
 
