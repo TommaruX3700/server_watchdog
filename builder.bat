@@ -75,6 +75,9 @@ if %errorlevel% neq 0 (
     echo Not being able to push to remote branch!
 )
 
+git fetch origin
+git switch main 
+
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: 2 - build for linux and push to release (done inside docker file)
 docker --version >nul 2>nul
