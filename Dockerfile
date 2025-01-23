@@ -19,7 +19,7 @@ RUN cargo install --path ./unistaller/
 
 RUN git remote set-url origin https://TommaruX3700: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@github.com/TommaruX3700/server_watchdog.git && \
     git config --global user.name "TommaruX3700" && \
-    git config --global user.email "tmx37.dev@gmail.com" && \
+    git config --global user.email "tommasomaruzzo@gmail.com" && \
     git add . && \
     git commit -m "Committing local changes before branch switch" || \
     git stash && \
