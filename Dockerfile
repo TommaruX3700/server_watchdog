@@ -11,7 +11,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install git
 # compile the code for debian usage, 
 RUN cargo install --path ./server_watchdog/
 RUN cargo install --path ./installer/
-RUN cargo install --path ./uninstaller/
+RUN cargo install --path ./unistaller/
 
 RUN git remote add origin ${REPO} 
 RUN fetch origin 
