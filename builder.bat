@@ -31,17 +31,17 @@ set "searchKey=repo"
 for /F "tokens=1,* delims==" %%A in (%file%) do (
     if "%%A"=="%searchKey%" (
         set "repo=%%B"
-        echo Found %repo%!
+        echo Found !repo!
     )
 )
 
-if %repo% == "" (
+if "!repo!" == "" (
     echo Couldn't find any repos! Check release_repo file . . .
 )
 endlocal
 
 :: Trying to push binaries
-git remote | findstr /R /C:"^origin$" >nul
+git remote | findstr /C:"origin" >nul
 if %ERRORLEVEL% neq 0 (
     echo No remote repository found. Trying to add it . . .
     git remote add origin %repo% >nul
