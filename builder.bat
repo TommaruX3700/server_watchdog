@@ -37,6 +37,8 @@ for /F "tokens=1,* delims==" %%A in (%file%) do (
 
 if "!repo!" == "" (
     echo Couldn't find any repos! Check release_repo file . . .
+    endlocal
+    exit /b 1
 )
 endlocal
 
@@ -57,6 +59,13 @@ if %ERRORLEVEL% neq 0 (
     git checkout -b win_release origin/win_release
 ) else (
     git checkout win_release
+)
+
+:: Check if the batch file still exists after switching branches
+if not exist "%~f0" (
+    echo Batch file is missing after switching branches!
+    echo Please ensure the file exists in the win_release branch.
+    exit /b 1
 )
 
 git add .
