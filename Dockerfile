@@ -4,7 +4,7 @@ FROM rust as builder
 WORKDIR /usr/src/myapp
 COPY . .
 ## get the repo from the copied "release_repo" file
-RUN export REPO=$(grep repo ./release_repo | cut -d '=' -f2) && \ printf "Debian repo is at: $REPO"
+RUN REPO=$(grep repo ./release_repo | cut -d '=' -f2)
 # ENV REPO=${REPO}
 
 RUN apt-get update && apt-get upgrade -y && apt-get install git
