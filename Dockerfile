@@ -17,9 +17,15 @@ RUN cargo install --path ./server_watchdog/
 RUN cargo install --path ./installer/
 RUN cargo install --path ./unistaller/
 
-RUN git remote get-url origin || git remote add origin https://github.com/TommaruX3700/server_watchdog.git && \
-    git fetch origin && \
+RUN git add . && \
+    git commit -m "Committing local changes before branch switch" || \
+    git stash && \
     git checkout deb_release || git checkout -b deb_release origin/deb_release
+
+
+# RUN git remote get-url origin || git remote add origin https://github.com/TommaruX3700/server_watchdog.git && \
+#     git fetch origin && \
+#     git checkout deb_release || git checkout -b deb_release origin/deb_release
 
 RUN git add . && \
     git commit -m "New debian release" && \
