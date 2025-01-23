@@ -1,28 +1,8 @@
 # Server_watchdog
-
-## v0.2 - Pre-Alpha - 07/01/2025
-### Updates
-- Added Dockerfile to assembly testing container enviroment
-- Developing MQTT Client messaging 
-- Developing auto-installer
-- 
-
-## v0.1 - pre-alpha - 10/12/2024
-### State:
-Under development.
-### Description:
+## Description:
 Watchdog for linux debian servers.
 Monitors resources, processes, and so on.
-### Requisites:
-- tokio
-- sysinfo
-- mqtt-client
-- serde
-- serde-json
-- nix
-- ctrlc
-- tail
-### How to use:
+## How to use:
 - use provided executable to install daemon:
     - if not specified otherwise, installation folder will be at `$/server_watchdog/`;
     - installation will try to install all pre-required packages, if they are not installed yet;
@@ -37,3 +17,22 @@ Monitors resources, processes, and so on.
 - Log files will be provided in installation folder, `tail` it to monitor logs of the program properly;
 
 - Type `server_wtdg --help` for other options.
+
+---
+## v0.3 - Pre-Alpha - 23/01/2025
+- Dockerfile configuration modified to cross-compile for debian systems and push release-ready binaries to proper release branches
+- Developed MQTT Client messages
+- Added Installer/Uninstaller
+- Added Ping-My-Devices feature
+- 
+
+## v0.2 - Pre-Alpha - 07/01/2025
+### Updates
+- Added Dockerfile to assembly testing container enviroment
+- Developing MQTT Client messaging 
+- Developing auto-installer
+
+## v0.1 - Pre-Alpha - 10/12/2024
+### State:
+Project created.
+

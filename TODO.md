@@ -7,7 +7,7 @@
     - implment automatic handle of new versions (dont know)
     - develop auto installation script for linux debian (checks version file and dowloads from the repo, also that installs necessary dependencies)
 
-# Setup testing enviroment
+# Setup linux-compilation machine
 - Debian system, such as a VM;
 
 # Installation tool 
