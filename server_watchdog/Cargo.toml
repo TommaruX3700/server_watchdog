@@ -12,6 +12,9 @@ serde_json = "1.0"
 ctrlc = "3.4" 
 rumqttc = "0.24.0"
 libc = "0.2.169"
-daemonize = "0.4.1"
 
+[profile.release]
+opt-level = 3       # Livello massimo di ottimizzazione
+debug = false       # Disabilita simboli di debug
+lto = "thin"        # Abilita il Link Time Optimization
 

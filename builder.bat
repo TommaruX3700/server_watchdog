@@ -12,9 +12,15 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-cargo build --release .\server_watchdog
-cargo build --release .\installer
-cargo build --release .\unistaller
+cd server_watchdog
+cargo build --release 
+cd ..
+cd installer
+cargo build --release 
+cd ..
+cd unistaller
+cargo build --release 
+cd ..
 
 :: Define the path to the text file, check it and get address
 setlocal enabledelayedexpansion
@@ -22,14 +28,14 @@ set "file=release_repo"
 set "repo="
 set "searchKey=repo"
 
-for /F "tokens=1,* delims==" %%A in (file) do (
+for /F "tokens=1,* delims==" %%A in (%file%) do (
     if "%%A"=="%searchKey%" (
         set "repo=%%B"
         echo Found %repo%!
     )
 )
 
-if %winRepo% == "" (
+if %repo% == "" (
     echo Couldn't find any repos! Check release_repo file . . .
 )
 endlocal

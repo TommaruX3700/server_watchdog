@@ -4,3 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+[profile.release]
+opt-level = 3       # Livello massimo di ottimizzazione
+debug = false       # Disabilita simboli di debug
+lto = "thin"        # Abilita il Link Time Optimization
