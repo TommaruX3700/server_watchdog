@@ -15,10 +15,10 @@ fn get_system_info() -> String {
     }
 
     format!(
-        "CPU Usage: {:.2}% | Memory Used: {} MB / {} MB",
+        "CPU Usage: {:.2}% | Memory Used: {} GB / {} GB",
         cpu_usage,
-        memory_used / 1024,
-        memory_total / 1024
+        memory_used / 1048576,
+        memory_total / 1048576
     )
 }
 
