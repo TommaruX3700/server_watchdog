@@ -93,7 +93,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-docker run --name server_watchdog builder 
+docker run --name server_watchdog server_watchdog
 
 :: try to push pack to debian release repo
 git fetch origin
