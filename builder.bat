@@ -87,9 +87,40 @@ if %errorlevel% neq 0 (
 )
 
 :: try to build the image and run it in a new container
-docker build -t server_watchdog . && docker run server_watchdog >nul 2>nul
+docker build -t server_watchdog .>nul 2>nul
 if %errorlevel% neq 0 (
-    echo Cant build or start a new Docker container! Shutting down . . .
+    echo Cant build new Docker container! Shutting down . . .
     exit /b 1
 )
 
+docker run --name server_watchdog builder 
+
+:: try to push pack to debian release repo
+git fetch origin
+
+git branch --list deb_release >nul
+if %ERRORLEVEL% neq 0 (
+    git checkout -b deb_release origin/deb_release
+) else (
+    git checkout deb_release
+)
+
+:: Check if the batch file still exists after switching branches
+if not exist "%~f0" (
+    echo Batch file is missing after switching branches!
+    echo Please ensure the file exists in the deb_release branch.
+    exit /b 1
+)
+
+docker cp server_watchdog:/app .
+docker rm server_watchdog
+
+git add .
+git commit -m "New debian release"
+git push --set-upstream origin deb_release >nul 
+if %errorlevel% neq 0 (
+    echo Not being able to push to remote branch!
+)
+
+git fetch origin
+git switch main 
