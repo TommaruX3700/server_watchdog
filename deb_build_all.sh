@@ -1,4 +1,4 @@
-DATE_ = $date +%d_%m_%Y
+DATE_=$(date +%d_%m_%Y)
 
 mkdir ./releases/deb_$DATE_
 mkdir ./releases/deb_$DATE_/installer
