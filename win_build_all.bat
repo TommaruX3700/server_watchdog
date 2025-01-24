@@ -9,19 +9,17 @@ mkdir releases\win\win_%DATE_%\uninstaller
 
 cd installer
 cargo build --release
-mkdir 
-move /Y target\* ..\releases\win\win_%DATE_%\installer
+move target ..\releases\win\win_%DATE_%\installer 
 cd ..
 
 cd server_watchdog
 cargo build --release
-move /Y target\* ..\releases\win\win_%DATE_%\server_watchdog
+move target ..\releases\win\win_%DATE_%\server_watchdog 
 cd ..
 
 cd uninstaller
 cargo build --release
-move /Y target\* ..\releases\win\win_%DATE_%\uninstaller
-
+move target ..\releases\win\win_%DATE_%\uninstaller 
 cd ..
 
 @echo Build and file organization completed.
