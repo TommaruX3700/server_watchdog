@@ -34,10 +34,16 @@ fn clear_cache() {
 
 use std::fs;
 fn get_temperatures() -> String {
-    let temp_path = "/sys/class/thermal/thermal_zone0/temp";
-    if let Ok(content) = fs::read_to_string(temp_path) {
-        let temp = content.trim().parse::<f64>().unwrap_or(0.0) / 1000.0;
-        return format!("CPU Temperature: {:.1}°C", temp);
+
+    let output = Command::new("sensors").output().expect("Failed to execture `sensors` command");
+    let output_str = String::from_utf8_lossy(&output.stdout);
+
+    for line in output_str.lines() {
+        if line.trim().starts_with("Tctl:") {
+            if let Some(temp) = line.split_whitespace().nth(1) {
+                return format!("CPU Temperature: {:.1}°C", temp);
+            }
+        }
     }
     "Temperature data not available".to_string()
 }

@@ -18,6 +18,9 @@ Monitors resources, processes, and so on.
 
 - Type `server_wtdg --help` for other options.
 
+## Requirements:
+- lm-sensors
+
 ---
 ## v0.3 - Pre-Alpha - 23/01/2025
 - Dockerfile configuration modified to cross-compile for debian systems and push release-ready binaries to proper release branches
