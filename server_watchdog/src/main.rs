@@ -50,28 +50,6 @@ fn get_temperatures() -> String {
     "Temperature data not available".to_string()
 }
 
-use crate::ping_devices::Pinger;
-fn ping() {
-    let filename = "ips_to_lookup"; // File containing hostnames to look up
-    match Pinger::read_hosts_from_file(filename) {
-        Ok(hostnames) => {
-            match Pinger::resolve_hostnames(hostnames) {
-                Ok(ips) => {
-                    for ip in ips {
-                        println!("Pinging IP: {}", ip);
-                        match Pinger::ping(ip) {
-                            Ok(_) => println!("Ping successful for {}", ip),
-                            Err(e) => eprintln!("Ping failed for {}: {}", ip, e),
-                        }
-                    }
-                }
-                Err(e) => eprintln!("Error resolving hostnames: {}", e),
-            }
-        }
-        Err(e) => eprintln!("Error reading file: {}", e),
-    }
-}
-
 #[tokio::main]
 async fn main() {
     println!("Starting application!");
@@ -91,7 +69,13 @@ async fn main() {
         let temperatures = get_temperatures();
         println!("{}", temperatures);
 
-        ping();
+        let filename = "ips_to_lookup"; // File containing hostnames to look up
+    
+        // Read the list of hostnames from the file and resolve them to IPs
+        match ping_devices::process_hostnames_from_file(filename) {
+            Ok(_) => println!("All pings processed."),
+            Err(e) => eprintln!("Error processing pings: {}", e),
+        }
 
         // TODO: implement MQTT message sending
         // send_mqtt_message("system/info", &system_info).await;

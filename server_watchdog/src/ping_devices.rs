@@ -1,74 +1,78 @@
-use pnet::packet::icmp::{echo_request, IcmpTypes};
-use pnet::packet::{icmp, Packet, ip::IpNextHeaderProtocols};
-use pnet::transport::{transport_channel, TransportChannelType::Layer3};
 use std::fs;
-use std::net::{IpAddr, ToSocketAddrs};
 use std::io::{self, BufRead};
+use std::process::Command;
+use std::net::{IpAddr, ToSocketAddrs};
 
-pub struct Pinger;
+/// Reads hostnames from the given file, resolves them to IP addresses, and pings them.
+pub fn process_hostnames_from_file(filename: &str) -> Result<(), String> {
+    // Read the list of hostnames from the file
+    let hostnames = read_hosts_from_file(filename).map_err(|e| e.to_string())?;
 
-impl Pinger {
-    // Function to ping an IP address
-    pub fn ping(target: IpAddr) -> Result<(), String> {
-        let protocol = IpNextHeaderProtocols::Icmp;
-        let (mut tx, mut rx) = transport_channel(1024, Layer3(IpNextHeaderProtocols::Icmp)).map_err(|e| e.to_string())?;
-
-        let mut packet = [0u8; 64];
-        let mut icmp_packet = echo_request::MutableEchoRequestPacket::new(&mut packet).unwrap();
-        icmp_packet.set_icmp_type(IcmpTypes::EchoRequest);
-        icmp_packet.set_sequence_number(1);
-        icmp_packet.set_identifier(42);
-        let icmp_packet_immutable = echo_request::EchoRequestPacket::new(icmp_packet.packet()).unwrap();
-        let icmp_packet_ref = icmp::IcmpPacket::new(icmp_packet_immutable.packet()).unwrap();
-        let checksum = icmp::checksum(&icmp_packet_ref);
-        icmp_packet.set_checksum(checksum);
-
-        tx.send_to(icmp_packet, target)
-            .map_err(|e| format!("Failed to send packet: {}", e))?;
-
-        let mut packet_iter = pnet::transport::icmp_packet_iter(&mut rx);
-        match packet_iter.next() {
-            Ok(packet) => {
-                println!("Received packet: {:?}", packet);
-                Ok(())
-            }
-            Err(e) => Err(format!("Error receiving packet: {}", e)),
-        }
-    }
-
-    // Function to read the file and return a list of hostnames
-    pub fn read_hosts_from_file(filename: &str) -> Result<Vec<String>, io::Error> {
-        let file = fs::File::open(filename)?;
-        let reader = io::BufReader::new(file);
-        let mut hosts = Vec::new();
-        
-        for line in reader.lines() {
-            if let Ok(line) = line {
-                let trimmed_line = line.trim();
-                if !trimmed_line.is_empty() {
-                    hosts.push(trimmed_line.to_string());
+    // Resolve each hostname to an IP address and ping them
+    for hostname in hostnames {
+        match resolve_hostname(&hostname) {
+            Ok(ip) => {
+                if let Err(e) = ping(ip) {
+                    eprintln!("Ping failed for {}: {}", hostname, e);
                 }
             }
+            Err(e) => eprintln!("Error resolving {}: {}", hostname, e),
         }
-        
-        Ok(hosts)
     }
+    Ok(())
+}
 
-    // Function to resolve hostnames to IP addresses
-    pub fn resolve_hostnames(hostnames: Vec<String>) -> Result<Vec<IpAddr>, String> {
-        let mut ips = Vec::new();
-        for hostname in hostnames {
-            match hostname.to_socket_addrs() {
-                Ok(mut addrs) => {
-                    if let Some(ip) = addrs.next() {
-                        ips.push(ip.ip());
-                    } else {
-                        return Err(format!("Could not resolve {}", hostname));
-                    }
-                }
-                Err(e) => return Err(format!("Error resolving {}: {}", hostname, e)),
+/// Reads hostnames from the given file.
+fn read_hosts_from_file(filename: &str) -> Result<Vec<String>, io::Error> {
+    let file = fs::File::open(filename)?;
+    let reader = io::BufReader::new(file);
+    let mut hosts = Vec::new();
+    
+    for line in reader.lines() {
+        if let Ok(line) = line {
+            let trimmed_line = line.trim();
+            if !trimmed_line.is_empty() {
+                hosts.push(trimmed_line.to_string());
             }
         }
-        Ok(ips)
+    }
+    
+    Ok(hosts)
+}
+
+/// Resolves a hostname to an IP address.
+fn resolve_hostname(hostname: &str) -> Result<IpAddr, String> {
+    match hostname.to_socket_addrs() {
+        Ok(mut addrs) => {
+            if let Some(ip) = addrs.next() {
+                Ok(ip.ip())
+            } else {
+                Err(format!("Could not resolve {}", hostname))
+            }
+        }
+        Err(e) => Err(format!("Error resolving {}: {}", hostname, e)),
+    }
+}
+
+/// Executes the `ping` command for the given IP address.
+fn ping(ip: IpAddr) -> Result<(), String> {
+    let ip_str = ip.to_string();
+    
+    // Execute the `ping` command with the `-c 4` flag (ping 4 times)
+    let output = Command::new("ping")
+        .arg("-c")
+        .arg("4")
+        .arg(ip_str.clone())
+        .output()
+        .map_err(|e| format!("Failed to execute ping command: {}", e))?;
+
+    // Check if the ping was successful (exit code 0 means success)
+    if output.status.success() {
+        // Ping was successful, no output needed
+        println!("Ping successful for {}", ip_str);
+        Ok(())
+    } else {
+        // Ping failed, print the error message
+        Err(format!("Ping failed for {}: {}", ip_str, String::from_utf8_lossy(&output.stderr)))
     }
 }
