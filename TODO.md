@@ -8,7 +8,7 @@
     - develop auto installation script for linux debian (checks version file and dowloads from the repo, also that installs necessary dependencies)
 
 # Setup linux-compilation machine
-- Debian system, such as a VM;
+- Compile on debian system.
 
 # Installation tool 
 - Start with debian only;
