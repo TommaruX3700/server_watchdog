@@ -42,10 +42,16 @@ fn read_hosts_from_file(filename: &str) -> Result<Vec<String>, io::Error> {
 
 /// Resolves a hostname to an IP address.
 fn resolve_hostname(hostname: &str) -> Result<IpAddr, String> {
+    // Try parsing the input as an IP address first
+    if let Ok(ip) = hostname.parse::<IpAddr>() {
+        return Ok(ip); // Return the parsed IP address directly
+    }
+
+    // If it's not an IP address, try resolving it as a hostname
     match hostname.to_socket_addrs() {
         Ok(mut addrs) => {
             if let Some(ip) = addrs.next() {
-                Ok(ip.ip())
+                Ok(ip.ip()) // Return the resolved IP address
             } else {
                 Err(format!("Could not resolve {}", hostname))
             }
@@ -53,6 +59,7 @@ fn resolve_hostname(hostname: &str) -> Result<IpAddr, String> {
         Err(e) => Err(format!("Error resolving {}: {}", hostname, e)),
     }
 }
+
 
 /// Executes the `ping` command for the given IP address.
 fn ping(ip: IpAddr) -> Result<(), String> {
