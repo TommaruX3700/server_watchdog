@@ -1,4 +1,5 @@
 mod log;
+mod ping_devices;
 
 use sysinfo::System;
 use log::{Log, LogLevel};
@@ -34,7 +35,7 @@ fn clear_cache() {
 
 fn get_temperatures() -> String {
 
-    let output = Command::new("sensors").output().expect("Failed to execture `sensors` command");
+    let output = Command::new("sensors").output().expect("Failed to execute `sensors` command");
     let output_str = String::from_utf8_lossy(&output.stdout);
 
     for line in output_str.lines() {
@@ -47,6 +48,28 @@ fn get_temperatures() -> String {
         }
     }
     "Temperature data not available".to_string()
+}
+
+use crate::ping_devices::Pinger;
+fn ping() {
+    let filename = "ips_to_lookup"; // File containing hostnames to look up
+    match Pinger::read_hosts_from_file(filename) {
+        Ok(hostnames) => {
+            match Pinger::resolve_hostnames(hostnames) {
+                Ok(ips) => {
+                    for ip in ips {
+                        println!("Pinging IP: {}", ip);
+                        match Pinger::ping(ip) {
+                            Ok(_) => println!("Ping successful for {}", ip),
+                            Err(e) => eprintln!("Ping failed for {}: {}", ip, e),
+                        }
+                    }
+                }
+                Err(e) => eprintln!("Error resolving hostnames: {}", e),
+            }
+        }
+        Err(e) => eprintln!("Error reading file: {}", e),
+    }
 }
 
 #[tokio::main]
@@ -68,7 +91,7 @@ async fn main() {
         let temperatures = get_temperatures();
         println!("{}", temperatures);
 
-        // TODO: implementare ping a lista di servizi di rete specificati
+        ping();
 
         // TODO: implement MQTT message sending
         // send_mqtt_message("system/info", &system_info).await;

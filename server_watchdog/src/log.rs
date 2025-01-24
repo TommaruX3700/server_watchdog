@@ -1,3 +1,4 @@
+use core::time;
 use std::{fs::File, io::Write};
 use chrono::{self, DateTime, Local};
 
@@ -15,19 +16,18 @@ pub struct Log {
     // - add buffer for infos
     // - add max file size
     m_file : File,
-    m_CreationTime : DateTime<Local>
-
 }
 
 impl Log {
     pub fn init() -> Log {
         // Dichiarare file di log e setting di base
-        let file = File::create("server_watchdog.log").expect("Error creating log file");
+        let mut file = File::create("server_watchdog.log").expect("Error creating log file");
         let timestamp = chrono::Local::now();
+        let init_message = format!("File created at: [{}] \n", timestamp);
+        file.write_all(init_message.as_bytes()).expect("Error writing to log file!");
 
         Log {
             m_file : file,
-            m_CreationTime : timestamp
         }
     }
 
