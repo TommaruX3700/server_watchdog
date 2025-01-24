@@ -32,7 +32,6 @@ fn clear_cache() {
         .status();
 }
 
-use std::fs;
 fn get_temperatures() -> String {
 
     let output = Command::new("sensors").output().expect("Failed to execture `sensors` command");
@@ -40,8 +39,10 @@ fn get_temperatures() -> String {
 
     for line in output_str.lines() {
         if line.trim().starts_with("Tctl:") {
-            if let Some(temp) = line.split_whitespace().nth(1) {
-                return format!("CPU Temperature: {:.1}°C", temp);
+            if let Some(temp_str) = line.split_whitespace().nth(1) {
+                if let Ok(temp) = temp_str.trim_end_matches("°C").parse::<f32>() {
+                    return format!("CPU Temperature: {:.1}°C", temp);
+                }
             }
         }
     }
